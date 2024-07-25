@@ -2,7 +2,9 @@
 //  TUSafariActivity.h
 //
 //  Created by Minsoo Choo on 07/25/24.
-//  Original work created by David Beck on 11/30/12.
+//  Copyright (c) 2024 Minsoo Choo. All rights reserved.
+//
+//  Created by David Beck on 11/30/12.
 //  Copyright (c) 2012 ThinkUltimate. All rights reserved.
 //
 //  http://github.com/davbeck/TUSafariActivity
