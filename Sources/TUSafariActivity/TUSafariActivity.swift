@@ -1,7 +1,8 @@
 //
 //  TUSafariActivity.h
 //
-//  Created by David Beck on 11/30/12.
+//  Created by Minsoo Choo on 07/25/24.
+//  Original work created by David Beck on 11/30/12.
 //  Copyright (c) 2012 ThinkUltimate. All rights reserved.
 //
 //  http://github.com/davbeck/TUSafariActivity
@@ -27,67 +28,48 @@
 //  OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "TUSafariActivity.h"
+import UIKit
 
-
-@implementation TUSafariActivity
-{
-	NSURL *_URL;
-}
-
-- (NSBundle *)_bundle
-{
-#ifdef SWIFTPM_MODULE_BUNDLE
-	return SWIFTPM_MODULE_BUNDLE;
-#else
-	return [NSBundle bundleForClass:self.class];
-#endif
-}
-
-- (NSString *)activityType
-{
-	return NSStringFromClass([self class]);
-}
-
-- (NSString *)activityTitle
-{
-	return NSLocalizedStringFromTableInBundle(@"Open in Safari", nil, [self _bundle], nil);
-}
-
-- (UIImage *)activityImage
-{
-    if ([UIImage respondsToSelector:@selector(imageNamed:inBundle:compatibleWithTraitCollection:)]) {
-        return [UIImage imageNamed:@"safari" inBundle:[self _bundle] compatibleWithTraitCollection:nil];
-    } else {
-        return [UIImage imageNamed:@"safari-7" inBundle:[self _bundle] compatibleWithTraitCollection:nil];
+public class TUSafariActivity: UIActivity {
+    var url: URL?
+    
+    public override var activityType: UIActivity.ActivityType? {
+        return UIActivity.ActivityType(rawValue: String(describing: self))
+    }
+    
+    public override var activityTitle: String? {
+        if #available(iOS 15, *) {
+            return String(localized: "Open in Safari")
+        } else {
+            // Fallback on earlier versions
+            return String("Open in Safari")
+        }
+    }
+    
+    public override var activityImage: UIImage? {
+        return UIImage(named: "safari", in: Bundle.module, compatibleWith: nil)
+    }
+    
+    @MainActor public override func canPerform(withActivityItems activityItems: [Any]?) -> Bool {
+        for activityItem in activityItems ?? [] {
+            if activityItem is URL && UIApplication.shared.canOpenURL(activityItem as! URL) {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    public override func prepare(withActivityItems activityItems: [Any]) {
+        for activityItem in activityItems ?? [] {
+            if activityItem is URL {
+                url = activityItem as? URL;
+            }
+        }
+    }
+    
+    @MainActor public override func perform() {
+        UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+        activityDidFinish(true)
     }
 }
-
-- (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
-{
-	for (id activityItem in activityItems) {
-		if ([activityItem isKindOfClass:[NSURL class]] && [[UIApplication sharedApplication] canOpenURL:activityItem]) {
-			return YES;
-		}
-	}
-	
-	return NO;
-}
-
-- (void)prepareWithActivityItems:(NSArray *)activityItems
-{
-	for (id activityItem in activityItems) {
-		if ([activityItem isKindOfClass:[NSURL class]]) {
-			_URL = activityItem;
-		}
-	}
-}
-
-- (void)performActivity
-{
-    [[UIApplication sharedApplication] openURL:_URL options:@{} completionHandler:^(BOOL success) {
-        [self activityDidFinish:YES];
-    }];
-}
-
-@end
