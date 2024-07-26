@@ -7,7 +7,7 @@ let package = Package(
     name: "TUSafariActivity",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v12)
+        .iOS(.v13)
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.

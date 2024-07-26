@@ -49,7 +49,7 @@ public class TUSafariActivity: UIActivity {
     }
     
     public override var activityImage: UIImage? {
-        return UIImage(named: "safari", in: Bundle.module, compatibleWith: nil)
+        return UIImage(systemName: "safari")
     }
     
     @MainActor public override func canPerform(withActivityItems activityItems: [Any]?) -> Bool {
