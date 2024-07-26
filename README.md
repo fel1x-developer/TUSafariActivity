@@ -18,4 +18,6 @@ let activity = TUSafariActivity()
 let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: [activity])
 ```
 
+And set `CFBundleAllowMixedLocalizations` to `YES` in `Info.plist`.
+
 Note that you can include the activity in any `UIActivityViewController` and it will only be shown to the user if there is a URL in the activity items.
