@@ -40,7 +40,7 @@ public class TUSafariActivity: UIActivity {
     }
     
     public override var activityTitle: String? {
-        return String(localized: "Open in Safari")
+        return String(localized: "Open in Safari", table: "TUSafariActivity", bundle: .module)
     }
     
     public override var activityImage: UIImage? {
