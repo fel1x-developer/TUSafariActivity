@@ -40,12 +40,7 @@ public class TUSafariActivity: UIActivity {
     }
     
     public override var activityTitle: String? {
-        if #available(iOS 15, *) {
-            return String(localized: "Open in Safari")
-        } else {
-            // Fallback on earlier versions
-            return String("Open in Safari")
-        }
+        return String(localized: "Open in Safari")
     }
     
     public override var activityImage: UIImage? {
